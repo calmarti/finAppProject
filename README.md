@@ -1,4 +1,4 @@
-## Inancial App Project with React
+## Financial App Project with React
 
 ### Current status:
 - Search bar implemented with React Select 
