@@ -5,4 +5,4 @@
 - Testing and playing with some finhub API's endpoints
 
 ### Next:
-- Creating a line chart with either Recharts.js or React Stockcharts.js
+- Creating a line chart with Ant Design Charts.
