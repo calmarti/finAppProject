@@ -2,7 +2,7 @@ import AsyncSelect from "react-select/async";
 import { useEffect, useState } from "react";
 import { Stock } from "@ant-design/plots";
 // import { Button } from "antd";
-
+import { Col, Divider, Row } from "antd";
 
 const client = require("axios");
 
@@ -23,11 +23,9 @@ const apiKey = "cb7qvqiad3i5ufvovoog";
 
 //TODO: el search debe funcionar siempre: leer docs (sobretodo parte de objeto Components)
 
-
-
 export function HomeMain() {
   const [keyword, setKeyword] = useState("");
-  // const [selected, setSelected] = useState("");
+  const [selected, setSelected] = useState({});
   const [options, setOptions] = useState([]);
   const [data, setData] = useState([]);
 
@@ -56,12 +54,14 @@ export function HomeMain() {
   const endDate = yesterday;
 
   console.log("data", data);
+  console.log("selected", selected);
 
-  const handleGetSeries = async (/* ev,  */ option) => {
+  //TODO: option recoge el objeto ('label', 'value') seleccionado pero setSelected luego no muta selected
+  const handleGetSeries = async (option) => {
     // ev.preventDefault();
+    console.log("OPTION", option);
     try {
-      console.log(option.value);
-      // setSelected(option.value);
+      setSelected({ name: option.label, symbol: option.value });
       const { data: multiseries } = await client.get(
         `https://finnhub.io/api/v1/stock/candle?symbol=${option.value}&resolution=D&from=${startDate}&to=${endDate}&token=${apiKey}`
       );
@@ -85,7 +85,6 @@ export function HomeMain() {
     }
   };
 
-  
   const config = {
     appendPadding: [0, 10, 0, 0],
     data,
@@ -95,7 +94,6 @@ export function HomeMain() {
   };
 
   //inputs de Async select
- 
 
   const filterOptions = (inputValue) => {
     setKeyword(inputValue);
@@ -108,20 +106,23 @@ export function HomeMain() {
     new Promise((resolve) => {
       setTimeout(() => {
         resolve(filterOptions(inputValue));
-      }, 1200);
+      }, 1000);
     });
 
-  return (    
-    <>
-      <AsyncSelect
-        autoFocus={true}
-        cacheOptions={true}  //TODO: probar esto
-        loadOptions={promiseOptions}
-        /* value={selected} */
-        onChange={handleGetSeries}
-      />
+  return (
+    <Row className="row">
+      <Col span={16} className="asset-graph-section">
+        <AsyncSelect
+          className="async-select"
+          autoFocus={true}
+          cacheOptions={true} //TODO: probar esto
+          loadOptions={promiseOptions}
+          value={selected.symbol}
+          onChange={handleGetSeries}
+          placeholder="Search a stock..."
+        />
 
-      {/* <Button
+        {/* <Button
         style={{ margin: "10px 10px", width: "100px" }}
         type="primary"
         size="large"
@@ -129,7 +130,15 @@ export function HomeMain() {
       >
         Go
       </Button> */}
-      <Stock {...config} />
-    </>
+
+        <div className="asset-title">
+          <h2 >{selected.name}</h2>
+        </div>
+
+        <Stock {...config} className="asset-graph" />
+      </Col>
+
+      <Col span={6}>Segunda columna: noticias</Col>
+    </Row>
   );
 }

@@ -1,0 +1,37 @@
+.row{
+margin-top:80px;
+
+}
+
+.asset-graph-section{
+  display:flex;
+  flex-flow: column nowrap;
+  gap:50px; 
+ /*  justify-content: space-around; */
+  align-items: center;
+  margin-top: 20px;
+
+/*   position: relative;
+  top:80px; */
+}
+
+.async-select {
+/*   position: relative;
+  top: 20px; */
+  width: 30%;
+  
+}
+
+.asset-graph {
+  width: 60%;  
+/*   background-color: lightblue; */
+ /*  height: 50%; */
+  /* border: 1px solid black; */
+}
+
+
+.asset-title{
+width:50%;
+text-align: center;
+
+}
