@@ -1,4 +1,4 @@
-import { Layout, Menu } from "antd";
+import { Layout, Menu, Button } from "antd";
 const { Header, Footer } = Layout;
 
 export default function Structure({ content }) {
@@ -6,19 +6,21 @@ export default function Structure({ content }) {
     { key: "1", label: "Indexes" },
     { key: "2", label: "Exchange rates" },
     { key: "3", label: "Bonds" },
-  ];
+    // { key: "4", label: "Log in" },
+    // { key: "5", label: "Sign up" }
+  ]
 
   return (
     <Layout className="layout">
       <Header
-        style={{
-          position: "fixed",
-          /*  zIndex: 1, */
-          width: "100%",
-        }}
+      className="header"
+     
       >
         <div className="logo" style={{ color: "#ffffff" }} />
         <Menu theme="dark" mode="horizontal" items={menuItems} />
+       <Button>
+
+       </Button>
       </Header>
 
       {content}

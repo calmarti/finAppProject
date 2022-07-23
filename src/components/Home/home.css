@@ -9,7 +9,7 @@ margin-top:80px;
   gap:50px; 
  /*  justify-content: space-around; */
   align-items: center;
-  margin-top: 20px;
+  margin-top: 50px;
 
 /*   position: relative;
   top:80px; */
@@ -18,7 +18,7 @@ margin-top:80px;
 .async-select {
 /*   position: relative;
   top: 20px; */
-  width: 30%;
+  width: 60%;
   
 }
 
@@ -31,7 +31,7 @@ margin-top:80px;
 
 
 .asset-title{
-width:50%;
-text-align: center;
+width:60%;
+text-align:left;
 
 }

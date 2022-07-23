@@ -1,12 +1,12 @@
-import AsyncSelect from "react-select/async";
 import { useEffect, useState } from "react";
-import { Stock } from "@ant-design/plots";
-// import { Button } from "antd";
+import { getAssetSeries, getSelectOptions } from "../../api/client";
+import { Button } from "antd";
+import SelectBox from "../SelectBox";
+import AssetChart from "../AssetChart";
+
 import { Col, Divider, Row } from "antd";
 
-const client = require("axios");
-
-const apiKey = "cb7qvqiad3i5ufvovoog";
+//const client = require("axios");
 
 //TODO: probar el Select de 'Antd' con opción 'remote' (¿better than async select)
 
@@ -30,10 +30,7 @@ export function HomeMain() {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    client
-      // .get(`https://finnhub.io/api/v1/search?q=${keyword}&token=${apiKey}`)
-      //`https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=${keyword}&apikey=${apiKey}`
-      .get(`https://finnhub.io/api/v1/stock/symbol?exchange=US&token=${apiKey}`)
+    getSelectOptions()
       .then((res) => {
         console.log(res);
         const data = res.data.map((obj) => ({
@@ -56,14 +53,14 @@ export function HomeMain() {
   console.log("data", data);
   console.log("selected", selected);
 
-  //TODO: option recoge el objeto ('label', 'value') seleccionado pero setSelected luego no muta selected
   const handleGetSeries = async (option) => {
-    // ev.preventDefault();
     console.log("OPTION", option);
     try {
       setSelected({ name: option.label, symbol: option.value });
-      const { data: multiseries } = await client.get(
-        `https://finnhub.io/api/v1/stock/candle?symbol=${option.value}&resolution=D&from=${startDate}&to=${endDate}&token=${apiKey}`
+      const { data: multiseries } = await getAssetSeries(
+        option,
+        startDate,
+        endDate
       );
       const len = multiseries.t.length;
       const data = [...Array(len)];
@@ -85,57 +82,21 @@ export function HomeMain() {
     }
   };
 
-  const config = {
-    appendPadding: [0, 10, 0, 0],
-    data,
-    xField: "date",
-    yField: ["open", "close", "high", "low"],
-    slider: {},
-  };
-
-  //inputs de Async select
-
-  const filterOptions = (inputValue) => {
-    setKeyword(inputValue);
-    return options.filter((option) =>
-      option.label.toLowerCase().includes(inputValue.toLowerCase())
-    );
-  };
-
-  const promiseOptions = (inputValue) =>
-    new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(filterOptions(inputValue));
-      }, 1000);
-    });
 
   return (
     <Row className="row">
       <Col span={16} className="asset-graph-section">
-        <AsyncSelect
-          className="async-select"
-          autoFocus={true}
-          cacheOptions={true} //TODO: probar esto
-          loadOptions={promiseOptions}
-          value={selected.symbol}
-          onChange={handleGetSeries}
-          placeholder="Search a stock..."
+        <SelectBox
+          options={options}
+          selected={selected}
+          setKeyword={setKeyword}
+          handleGetSeries={handleGetSeries}
         />
-
-        {/* <Button
-        style={{ margin: "10px 10px", width: "100px" }}
-        type="primary"
-        size="large"
-        onClick={handleGetSeries}
-      >
-        Go
-      </Button> */}
-
         <div className="asset-title">
-          <h2 >{selected.name}</h2>
+          <h2>{selected.name}</h2>
         </div>
 
-        <Stock {...config} className="asset-graph" />
+        <AssetChart data={data} />
       </Col>
 
       <Col span={6}>Segunda columna: noticias</Col>
