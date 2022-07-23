@@ -6,22 +6,26 @@ import AssetChart from "../AssetChart";
 
 import { Col, Divider, Row } from "antd";
 
-//const client = require("axios");
 
-//TODO: probar el Select de 'Antd' con opción 'remote' (¿better than async select)
+//TODO: submenú de principales índices y endpoints (y api(s)!) correspondiente(s)
+//TODO: probar endpoint de alphavantage de exchange rates (meter symbols "a mano") y sino funciona buscar otra api
+//TODO: Marquee-like component with main stock indexes, exchange rates, oil price, etc. (yahoo finance?)
 
+//TODO: en AssetChart
+//0. subtítulo: precio actual, cambio absoluto y cambio % de la acción (endpoint de quote de finhub)
+//1. posibilidad de cambiar a LineBar
+//2. mini componente con datos del endpoint de Company Profile 2 (justo debajo del chart)
+
+//TODO: segunda columna: news: endpoint market news => por defecto principales headlines del mercado y geopolíticas; 
+//al seleccionar 'asset' en SearchBox disparar en paralelo endpoint de company news y si hay news que las renderice 
+//en lugar de las headlines por defecto
+
+//probar el Select de 'Antd' con opción 'remote' (¿better than async select)
 //dato del cierre del índice S&P500 => yahoo finance api
 //https://query2.finance.yahoo.com/v8/finance/chart/%5EGSPC
 //where %5E is ^ ( ^GSPC )
-//de hecho, el api de yahoo podría ser mejor que finhub (en particular para obtener el symbol en el async select) - único tema es el limite diario de 100 requests!
 
-//TODO: decisión: ¿sigo con finhub y monto el candle stick chart con Ant Design y el json "a mano" o me la juego con yahoo finance?
 
-//TODO: cambios:
-//1. crear un JSON con los ticker genéricos del S&P500 y reestructurar con él el funcionamiento de AsyncSelect
-//2. luego eliminar llamada al API de /search (symbol lookup) (los simbolos más específicos dan 403 o "No data") - funcionalidad en standby hasta encontrar un endpoint equivalente en otra API
-
-//TODO: el search debe funcionar siempre: leer docs (sobretodo parte de objeto Components)
 
 export function HomeMain() {
   const [keyword, setKeyword] = useState("");

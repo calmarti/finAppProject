@@ -7,9 +7,10 @@ margin-top:80px;
   display:flex;
   flex-flow: column nowrap;
   gap:50px; 
- /*  justify-content: space-around; */
-  align-items: center;
+ /*  justify-content: center; */
+  align-items: flex-start;
   margin-top: 50px;
+  margin-left:80px;
 
 /*   position: relative;
   top:80px; */
