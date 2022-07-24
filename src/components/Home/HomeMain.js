@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
-import { getAssetSeries, getSelectOptions } from "../../api/client";
+import {
+  getAssetCurrentData,
+  getAssetSeries,
+  getSelectOptions,
+} from "../../api/client";
 import { Button } from "antd";
 import SelectBox from "../SelectBox";
 import AssetChart from "../AssetChart";
 
 import { Col, Divider, Row } from "antd";
-
 
 //TODO: submenú de principales índices y endpoints (y api(s)!) correspondiente(s)
 //TODO: probar endpoint de alphavantage de exchange rates (meter symbols "a mano") y sino funciona buscar otra api
@@ -16,8 +19,8 @@ import { Col, Divider, Row } from "antd";
 //1. posibilidad de cambiar a LineBar
 //2. mini componente con datos del endpoint de Company Profile 2 (justo debajo del chart)
 
-//TODO: segunda columna: news: endpoint market news => por defecto principales headlines del mercado y geopolíticas; 
-//al seleccionar 'asset' en SearchBox disparar en paralelo endpoint de company news y si hay news que las renderice 
+//TODO: segunda columna: news: endpoint market news => por defecto principales headlines del mercado y geopolíticas;
+//al seleccionar 'asset' en SearchBox disparar en paralelo endpoint de company news y si hay news que las renderice
 //en lugar de las headlines por defecto
 
 //probar el Select de 'Antd' con opción 'remote' (¿better than async select)
@@ -25,13 +28,16 @@ import { Col, Divider, Row } from "antd";
 //https://query2.finance.yahoo.com/v8/finance/chart/%5EGSPC
 //where %5E is ^ ( ^GSPC )
 
-
-
 export function HomeMain() {
   const [keyword, setKeyword] = useState("");
   const [selected, setSelected] = useState({});
   const [options, setOptions] = useState([]);
   const [data, setData] = useState([]);
+  const [currentData, setCurrentData] = useState({
+    price: null,
+    change: null,
+    percent_change: null,
+  });
 
   useEffect(() => {
     getSelectOptions()
@@ -81,11 +87,17 @@ export function HomeMain() {
         };
       }
       setData(data);
+      const { data: quote } = await getAssetCurrentData(selected);
+      console.log("quote", quote);
+      setCurrentData({
+        price: quote.c,
+        change: quote.d,
+        percent_change: quote.dp,
+      });
     } catch (err) {
       console.log(err);
     }
   };
-
 
   return (
     <Row className="row">
@@ -98,6 +110,14 @@ export function HomeMain() {
         />
         <div className="asset-title">
           <h2>{selected.name}</h2>
+          <h2>{currentData.price}</h2>
+          <h3>
+            {currentData.change}
+            <span style={{ fontSize: "1rem" }}>
+              {currentData.percent_change &&
+                ` (${currentData.percent_change}%)`}
+            </span>
+          </h3>
         </div>
 
         <AssetChart data={data} />
