@@ -110,7 +110,7 @@ export default function HomeMain() {
 
   return (
     <Row className="row">
-      <Col span={16} className="asset-graph-section">
+      <Col span={10} className="asset-graph-section">
         <SelectBox
           options={options}
           selected={selected}
@@ -132,8 +132,8 @@ export default function HomeMain() {
         <AssetChart data={data} />
       </Col>
 
-      <Col span={6}>
-        <News newsData={newsData}/>
+      <Col span={12} >
+        <News newsData={newsData} />
       </Col>
     </Row>
   );
