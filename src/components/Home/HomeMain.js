@@ -1,21 +1,21 @@
 import { useEffect, useState } from "react";
 import {
-  getAssetCurrentData,
+  // getAssetCurrentData,
   getAssetSeries,
+  getNews,
   getSelectOptions,
 } from "../../api/client";
-import { Button } from "antd";
 import SelectBox from "../SelectBox";
 import AssetChart from "../AssetChart";
-
-import { Col, Divider, Row } from "antd";
+import { Col, Row } from "antd";
+import News from "./News";
 
 //TODO: submenú de principales índices y endpoints (y api(s)!) correspondiente(s)
 //TODO: probar endpoint de alphavantage de exchange rates (meter symbols "a mano") y sino funciona buscar otra api
 //TODO: Marquee-like component with main stock indexes, exchange rates, oil price, etc. (yahoo finance?)
 
 //TODO: en AssetChart
-//0. subtítulo: precio actual, cambio absoluto y cambio % de la acción (endpoint de quote de finhub)
+//0. subtítulo: precio actual (quote) en orden de magnitud distinto al de la serie (de paso super lento); ¿cambiar por websockets?, ¿cambiar por últimas 2 entradas de series?
 //1. posibilidad de cambiar a LineBar
 //2. mini componente con datos del endpoint de Company Profile 2 (justo debajo del chart)
 
@@ -28,16 +28,18 @@ import { Col, Divider, Row } from "antd";
 //https://query2.finance.yahoo.com/v8/finance/chart/%5EGSPC
 //where %5E is ^ ( ^GSPC )
 
-export function HomeMain() {
+export default function HomeMain() {
   const [keyword, setKeyword] = useState("");
   const [selected, setSelected] = useState({});
   const [options, setOptions] = useState([]);
   const [data, setData] = useState([]);
-  const [currentData, setCurrentData] = useState({
-    price: null,
-    change: null,
-    percent_change: null,
-  });
+  const [newsData, setNewsData] = useState([]);
+
+  // const [currentData, setCurrentData] = useState({
+  //   price: null,
+  //   change: null,
+  //   percent_change: null,
+  // });
 
   useEffect(() => {
     getSelectOptions()
@@ -52,6 +54,12 @@ export function HomeMain() {
       .catch((err) => console.log(err));
   }, [keyword]);
 
+  useEffect(() => {
+    getNews().then((result) => {
+      setNewsData(result.data);
+    });
+  }, []);
+
   //Stock component stuff
 
   const yesterday = Math.floor(Date.now() / 1000) - Math.floor(1 * 24 * 3600); //must be seconds , not miliseconds
@@ -62,6 +70,7 @@ export function HomeMain() {
 
   console.log("data", data);
   console.log("selected", selected);
+  console.log("news", newsData);
 
   const handleGetSeries = async (option) => {
     console.log("OPTION", option);
@@ -87,13 +96,13 @@ export function HomeMain() {
         };
       }
       setData(data);
-      const { data: quote } = await getAssetCurrentData(selected);
-      console.log("quote", quote);
-      setCurrentData({
-        price: quote.c,
-        change: quote.d,
-        percent_change: quote.dp,
-      });
+      // const { data: quote } = await getAssetCurrentData(selected);
+      // console.log("quote", quote);
+      // setCurrentData({
+      //   price: quote.c,
+      //   change: quote.d,
+      //   percent_change: quote.dp,
+      // });
     } catch (err) {
       console.log(err);
     }
@@ -110,20 +119,22 @@ export function HomeMain() {
         />
         <div className="asset-title">
           <h2>{selected.name}</h2>
-          <h2>{currentData.price}</h2>
+          {/*           <h2>{currentData.close}</h2>
           <h3>
             {currentData.change}
             <span style={{ fontSize: "1rem" }}>
               {currentData.percent_change &&
                 ` (${currentData.percent_change}%)`}
             </span>
-          </h3>
+          </h3> */}
         </div>
 
         <AssetChart data={data} />
       </Col>
 
-      <Col span={6}>Segunda columna: noticias</Col>
+      <Col span={6}>
+        <News newsData={newsData}/>
+      </Col>
     </Row>
   );
 }

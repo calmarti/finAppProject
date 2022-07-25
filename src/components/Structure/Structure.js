@@ -1,7 +1,7 @@
 import { Layout, Menu, Button } from "antd";
 const { Header, Footer } = Layout;
 
-export default function Structure({ content }) {
+export default function Structure({ children }) {
   const menuItems = [
     { key: "1", label: "Indexes" },
     { key: "2", label: "Exchange rates" },
@@ -25,7 +25,7 @@ export default function Structure({ content }) {
         </div>
       </Header>
 
-      {content}
+      {children}
 
       <Footer className="footer">Footer</Footer>
     </Layout>

@@ -14,7 +14,10 @@ export const getAssetSeries = (option, startDate, endDate) =>
     `${baseURL}/stock/candle?symbol=${option.value}&resolution=D&from=${startDate}&to=${endDate}&token=${apiKey}`
   );
 
-export const getAssetCurrentData = (selected) =>
-  client.get(`${baseURL}/quote?symbol=${selected.symbol}&token=${apiKey}`);
+export const getNews = (category = "general") =>
+  client.get(`${baseURL}/news?category=${category}&token=${apiKey}`);
+
+// export const getAssetCurrentData = (selected) =>
+//   client.get(`${baseURL}/quote?symbol=${selected.symbol}&token=${apiKey}`);
 
 //`https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=${keyword}&apikey=${apiKey}`
