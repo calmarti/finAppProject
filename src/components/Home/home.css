@@ -17,8 +17,8 @@
 }
 
 .async-select {
- position:relative;
- top:-20px;
+  position: relative;
+  top: -20px;
   width: 70%;
 }
 
@@ -34,10 +34,9 @@
   text-align: left;
 }
 
-
 ul.cards-list {
   list-style-type: none;
-  display:flex;
+  display: flex;
   flex-flow: row wrap;
-  gap:20px;
+  gap: 20px;
 }
