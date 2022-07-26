@@ -4,6 +4,7 @@ import App from './App';
 import 'antd/dist/antd.css'
 import { BrowserRouter } from 'react-router-dom';
 //import "@ant - design/flowchart/dist/index.css";
+import "./antd.css";
 import "./styles.css";
 import "./components/Home/home.css";
 import "./components/Structure/structure.css";

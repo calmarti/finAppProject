@@ -12,14 +12,14 @@ export default function Structure({ children }) {
 
   return (
     <Layout className="layout">
-      <Header className="header">
-        <div className="logo" style={{ color: "#ffffff" }} />
-        <Menu theme="dark" mode="horizontal" items={menuItems} />
+      <Header className="header" style={{ backgroundColor: "#ffffff" }}>
+        <div className="logo"/>
+        <Menu className="menu" theme="light" mode="horizontal" items={menuItems} />
         <div className="header-buttons">
           <Button type="primary" size="default">
             Log In
           </Button>
-          <Button type="default" size="default">
+          <Button type="default" size="default" className="signup-button">
             Sign Up
           </Button>
         </div>

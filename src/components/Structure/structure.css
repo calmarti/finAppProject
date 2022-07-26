@@ -1,9 +1,9 @@
 .logo {
   float: left;
-  width: 120px;
+  width: 240px;
   height: 31px;
   margin: 16px 24px 16px 0;
-  background: rgba(255, 255, 255, 0.3);
+  background: #000000;
 }
 
 .header {
@@ -12,11 +12,20 @@
   width: 100%;
 }
 
-.header-buttons{
-position:relative;
-bottom:60px;
-left:1560px;
+.menu {
+  background-color: #ffffff;
+  border-color: #ffffff;
+  color: #000000;
+}
 
+.header-buttons {
+  position: relative;
+  bottom: 60px;
+  left: 1560px;
+}
+
+.signup-button{
+  color: #000000;
 }
 
 .layout {

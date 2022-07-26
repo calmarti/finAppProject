@@ -20,6 +20,15 @@
   position: relative;
   top: -20px;
   width: 70%;
+
+}
+
+.async-select:hover{
+  color:black;
+} 
+
+.async-select:focus{
+/*   border-color: black; */
 }
 
 .asset-graph {
