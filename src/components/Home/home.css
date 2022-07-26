@@ -27,20 +27,26 @@
 }
 
 .async-select:focus {
-    /* border-color: black; */
+  /* border-color: black; */
 }
 
 .asset-graph {
   width: 70%;
-
 }
 
-.asset-title {
+.asset-stats {
   width: 70%;
   text-align: left;
 }
 
-.top-news-title{
+.show-in-red {
+  color: red;
+}
+.show-in-green {
+  color: green;
+}
+
+.top-news-title {
   /* position:relative;
   left:42px;
   top:-10px; */
@@ -57,12 +63,11 @@ ul.cards-list {
 .card {
   width: 725px;
   height: 130px;
-
 }
 
-.card-summary{
+.card-summary {
   width: 600px;
   white-space: nowrap;
-  text-overflow:ellipsis;
-  overflow:hidden;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }

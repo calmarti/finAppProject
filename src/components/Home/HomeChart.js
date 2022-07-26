@@ -10,8 +10,6 @@ import AssetChart from "../AssetChart";
 import { Col, Row } from "antd";
 import News from "./News";
 
-
-
 //TODO: submenú de principales índices y endpoints (y api(s)!) correspondiente(s)
 //TODO: probar endpoint de alphavantage de exchange rates (meter symbols "a mano") y sino funciona buscar otra api
 //TODO: Marquee-like component with main stock indexes, exchange rates, oil price, etc. (yahoo finance?)
@@ -35,7 +33,7 @@ export default function HomeChart() {
   const [options, setOptions] = useState([]);
   const [data, setData] = useState([]);
   const [newsData, setNewsData] = useState([]);
-  const [lastPriceStats, setLastPriceStats] = useState({});
+  const [lastPriceStats, setLastPriceStats] = useState(null);
 
   // const [currentData, setCurrentData] = useState({
   //   price: null,
@@ -100,8 +98,12 @@ export default function HomeChart() {
       setData(data);
       const lastPrice = data[data.length - 1].close;
       const lastButOnePrice = data[data.length - 2].close;
-      const absoluteChange = Number.parseFloat(lastPrice - lastButOnePrice).toFixed(2);
-      const relativeChange = Number.parseFloat((absoluteChange / lastButOnePrice) * 100).toFixed(2);
+      const absoluteChange = Number.parseFloat(
+        lastPrice - lastButOnePrice
+      ).toFixed(2);
+      const relativeChange = Number.parseFloat(
+        (absoluteChange / lastButOnePrice) * 100
+      ).toFixed(2);
       setLastPriceStats({
         lastPrice,
         absoluteChange,
@@ -131,12 +133,25 @@ export default function HomeChart() {
           setKeyword={setKeyword}
           handleGetSeries={handleGetSeries}
         />
-        <div className="asset-title">
-          <h2>{selected.name}</h2>
-          <h3>{lastPriceStats.lastPrice} USD</h3>
-          <h4>{lastPriceStats.absoluteChange + " "}{`(${lastPriceStats.relativeChange})`}</h4>
-          
- 
+        <div className="asset-stats">
+          {selected.name && (
+            <h2 style={{ fontSize: "1.5rem" }}>{selected.name}</h2>
+          )}
+          {lastPriceStats && (
+            <span style={{ fontSize: "1.3rem" }}>
+              {lastPriceStats && lastPriceStats.lastPrice}{" "}
+              <span style={{ fontSize: "1rem" }}>USD</span>
+            </span>
+          )}
+          {lastPriceStats && (
+            <h4
+              className={lastPriceStats.absoluteChange < 0 ? "show-in-red" : "show-in-green"}
+            >
+              {lastPriceStats.absoluteChange +
+                " " +
+                `(${lastPriceStats.relativeChange}%)`}
+            </h4>
+          )}
         </div>
         <AssetChart data={data} />
       </Col>

@@ -7,12 +7,13 @@ export default function AssetChart({ data }) {
     appendPadding: [0, 10, 0, 0],
     data: data,
     xField: "date",
-    yField: ["open", "close", "high", "low"],
+    yField: ["close", "open", "high", "low"],
     slider: {},
+    
   };
 
   return(
     
-    <Stock {...config} className="asset-graph" />
+    <Stock {...config} /* autoFit={true}  */className="asset-graph" />
   )
 }
