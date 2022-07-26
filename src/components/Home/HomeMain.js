@@ -16,12 +16,10 @@ import News from "./News";
 
 //TODO: en AssetChart
 //0. subtítulo: precio actual (quote) en orden de magnitud distinto al de la serie (de paso super lento); ¿cambiar por websockets?, ¿cambiar por últimas 2 entradas de series?
-//1. posibilidad de cambiar a LineBar
-//2. mini componente con datos del endpoint de Company Profile 2 (justo debajo del chart)
+//1. opciones: 1D, W, M, 3M, 6M, 1Y, YTD.
+//2. posibilidad de cambiar a LineBar
+//3. mini componente con datos del endpoint de Company Profile 2 (justo debajo del chart)
 
-//TODO: segunda columna: news: endpoint market news => por defecto principales headlines del mercado y geopolíticas;
-//al seleccionar 'asset' en SearchBox disparar en paralelo endpoint de company news y si hay news que las renderice
-//en lugar de las headlines por defecto
 
 //probar el Select de 'Antd' con opción 'remote' (¿better than async select)
 //dato del cierre del índice S&P500 => yahoo finance api

@@ -20,22 +20,19 @@
   position: relative;
   top: -20px;
   width: 70%;
-
 }
 
-.async-select:hover{
-  color:black;
-} 
+.async-select:hover {
+  color: black;
+}
 
-.async-select:focus{
-/*   border-color: black; */
+.async-select:focus {
+  /*   border-color: black; */
 }
 
 .asset-graph {
   width: 70%;
-  /*   background-color: lightblue; */
-  /*  height: 50%; */
-  /* border: 1px solid black; */
+
 }
 
 .asset-title {
@@ -43,9 +40,29 @@
   text-align: left;
 }
 
+.top-news-title{
+  /* position:relative;
+  left:42px;
+  top:-10px; */
+  margin: 20px 40px;
+}
+
 ul.cards-list {
   list-style-type: none;
   display: flex;
   flex-flow: row wrap;
   gap: 20px;
+}
+
+.card {
+  width: 725px;
+  height: 130px;
+
+}
+
+.card-summary{
+  width: 600px;
+  white-space: nowrap;
+  text-overflow:ellipsis;
+  overflow:hidden;
 }
