@@ -7,7 +7,8 @@ import {
 } from "../../api/client";
 import SelectBox from "../SelectBox";
 import AssetChart from "../AssetChart";
-import { Col, Row } from "antd";
+import { ArrowDownOutlined, ArrowUpOutlined } from "@ant-design/icons";
+import { Col, Row, Statistic } from "antd";
 import News from "./News";
 
 //TODO: submenú de principales índices y endpoints (y api(s)!) correspondiente(s)
@@ -15,8 +16,11 @@ import News from "./News";
 //TODO: Marquee-like component with main stock indexes, exchange rates, oil price, etc. (yahoo finance?)
 
 //TODO: en AssetChart
-//0. subtítulo: precio actual (quote) en orden de magnitud distinto al de la serie (de paso super lento); ¿cambiar por websockets?, ¿cambiar por últimas 2 entradas de series?
-//1. opciones: 1D, W, M, 3M, 6M, 1Y, YTD.
+//0. estilos y features nativos del compo Stock (read the docs!)
+//1. opciones: 1D, 5D, W, M, 3M, 6M, 1Y, YTD.
+//1.1 contenedor de frecuencias (compo de antd apropiado)
+//1.2 una variable para cada segmento (a partir del state data, sin api calls)
+//1.3 pasar variables como props al contenedor y lógica del handleClick
 //2. posibilidad de cambiar a LineBar
 //3. mini componente con datos del endpoint de Company Profile 2 (justo debajo del chart)
 
@@ -133,17 +137,42 @@ export default function HomeChart() {
           setKeyword={setKeyword}
           handleGetSeries={handleGetSeries}
         />
+
         <div className="asset-stats">
           {selected.name && (
-            <h2 style={{ fontSize: "1.5rem" }}>{selected.name}</h2>
+            <h2 style={{ fontSize: "1.6rem" }}>{selected.name}</h2>
           )}
+
           {lastPriceStats && (
-            <span style={{ fontSize: "1.3rem" }}>
+            <span style={{ fontSize: "1.6rem" }}>
               {lastPriceStats && lastPriceStats.lastPrice}{" "}
               <span style={{ fontSize: "1rem" }}>USD</span>
             </span>
           )}
+
           {lastPriceStats && (
+            <Statistic
+              title={selected.symbol}
+              value={lastPriceStats.relativeChange}
+              precision={2}
+              valueStyle={
+                lastPriceStats.relativeChange > 0
+                  ? { color: "#3f8600" }
+                  : { color: "red" }
+              }
+              prefix={
+                lastPriceStats.relativeChange > 0 ? (
+                  <ArrowUpOutlined />
+                ) : (
+                  <ArrowDownOutlined />
+                )
+              }
+              suffix="%"
+            />
+          )}
+        </div>
+
+        {/* {lastPriceStats && (
             <h4
               className={lastPriceStats.absoluteChange < 0 ? "show-in-red" : "show-in-green"}
             >
@@ -151,8 +180,9 @@ export default function HomeChart() {
                 " " +
                 `(${lastPriceStats.relativeChange}%)`}
             </h4>
-          )}
-        </div>
+          )} 
+        </div> */}
+
         <AssetChart data={data} />
       </Col>
 
