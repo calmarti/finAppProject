@@ -7,7 +7,13 @@ import {
 } from "../../api/client";
 import SelectBox from "../SelectBox";
 import AssetChart from "../AssetChart";
-import { ArrowDownOutlined, ArrowUpOutlined } from "@ant-design/icons";
+import LineChart from "../LineChart";
+import {
+  ArrowDownOutlined,
+  ArrowUpOutlined,
+  LineChartOutlined,
+  BarChartOutlined,
+} from "@ant-design/icons";
 import { Col, Row, Statistic } from "antd";
 import News from "./News";
 
@@ -38,6 +44,7 @@ export default function HomeChart() {
   const [data, setData] = useState([]);
   const [newsData, setNewsData] = useState([]);
   const [lastPriceStats, setLastPriceStats] = useState(null);
+  const [chartType, setChartType] = useState("line");
 
   // const [currentData, setCurrentData] = useState({
   //   price: null,
@@ -172,18 +179,17 @@ export default function HomeChart() {
           )}
         </div>
 
-        {/* {lastPriceStats && (
-            <h4
-              className={lastPriceStats.absoluteChange < 0 ? "show-in-red" : "show-in-green"}
-            >
-              {lastPriceStats.absoluteChange +
-                " " +
-                `(${lastPriceStats.relativeChange}%)`}
-            </h4>
-          )} 
-        </div> */}
-
-        <AssetChart data={data} />
+        {chartType === "line" ? (
+          <>
+            <LineChart data={data} />
+            <BarChartOutlined onClick={(ev) => setChartType("stock")} style={{fontSize:"1.5rem"}} />
+          </>
+        ) : (
+          <>
+            <AssetChart data={data} />
+            <LineChartOutlined onClick={(ev) => setChartType("line")} style={{fontSize:"1.5rem"}}/>
+          </>
+        )}
       </Col>
 
       <Col span={10}>
