@@ -14,6 +14,6 @@ export default function AssetChart({ data }) {
 
   return(
     
-    <Stock {...config} /* autoFit={true}  */className="asset-graph" />
+    <Stock {...config} /* autoFit={true}  */ width={600} /* className="asset-graph" */ />
   )
 }

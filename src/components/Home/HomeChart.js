@@ -175,19 +175,20 @@ export default function HomeChart() {
                 )
               }
               suffix="%"
+              className="statistic-component"
             />
           )}
         </div>
 
         {chartType === "line" ? (
           <>
-            <LineChart data={data} />
             <BarChartOutlined onClick={(ev) => setChartType("stock")} style={{fontSize:"1.5rem"}} />
+            <LineChart data={data} />
           </>
         ) : (
           <>
-            <AssetChart data={data} />
             <LineChartOutlined onClick={(ev) => setChartType("line")} style={{fontSize:"1.5rem"}}/>
+            <AssetChart data={data} />
           </>
         )}
       </Col>

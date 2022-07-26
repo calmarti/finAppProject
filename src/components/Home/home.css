@@ -30,9 +30,9 @@
   /* border-color: black; */
 }
 
-.asset-graph {
+/* .asset-graph {
   width: 70%;
-}
+} */
 
 .asset-stats {
   width: 70%;
@@ -45,6 +45,11 @@
 .show-in-green {
   color: green;
 } */
+
+
+.statistic-component{
+margin-bottom:-40px;
+}
 
 .top-news-title {
   /* position:relative;
