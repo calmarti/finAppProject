@@ -13,7 +13,7 @@ export default function Structure({ children }) {
   return (
     <Layout className="layout">
       <Header className="header" style={{ backgroundColor: "#ffffff" }}>
-        <div className="logo"/>
+        <div className="logo">Logo</div>
         <Menu className="menu" theme="light" mode="horizontal" items={menuItems} />
         <div className="header-buttons">
           <Button type="primary" size="default">

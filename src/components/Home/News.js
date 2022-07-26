@@ -1,6 +1,5 @@
 import { Card } from "antd";
 
-//TODO: cambiar formato del Card (docs de Ant Design), reemplazar el <p> por un subcompo interno del Card
 
 export default function News({ newsData }) {
   // const { Meta } = Card;

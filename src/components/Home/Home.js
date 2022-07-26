@@ -1,10 +1,10 @@
 import Structure from "../Structure";
-import HomeMain from "./HomeMain";
+import HomeChart from "./HomeChart";
 
 export function Home() {
   return (
     <Structure>
-      <HomeMain />
+      <HomeChart />
      </Structure>
   );
 }

@@ -10,6 +10,8 @@ import AssetChart from "../AssetChart";
 import { Col, Row } from "antd";
 import News from "./News";
 
+
+
 //TODO: submenú de principales índices y endpoints (y api(s)!) correspondiente(s)
 //TODO: probar endpoint de alphavantage de exchange rates (meter symbols "a mano") y sino funciona buscar otra api
 //TODO: Marquee-like component with main stock indexes, exchange rates, oil price, etc. (yahoo finance?)
@@ -20,18 +22,20 @@ import News from "./News";
 //2. posibilidad de cambiar a LineBar
 //3. mini componente con datos del endpoint de Company Profile 2 (justo debajo del chart)
 
-
 //probar el Select de 'Antd' con opción 'remote' (¿better than async select)
 //dato del cierre del índice S&P500 => yahoo finance api
 //https://query2.finance.yahoo.com/v8/finance/chart/%5EGSPC
 //where %5E is ^ ( ^GSPC )
 
-export default function HomeMain() {
+//TODO: probar si al inicializar los useState (donde tenga sentido) todo sigue igual
+
+export default function HomeChart() {
   const [keyword, setKeyword] = useState("");
   const [selected, setSelected] = useState({});
   const [options, setOptions] = useState([]);
   const [data, setData] = useState([]);
   const [newsData, setNewsData] = useState([]);
+  const [lastPriceStats, setLastPriceStats] = useState({});
 
   // const [currentData, setCurrentData] = useState({
   //   price: null,
@@ -94,6 +98,16 @@ export default function HomeMain() {
         };
       }
       setData(data);
+      const lastPrice = data[data.length - 1].close;
+      const lastButOnePrice = data[data.length - 2].close;
+      const absoluteChange = Number.parseFloat(lastPrice - lastButOnePrice).toFixed(2);
+      const relativeChange = Number.parseFloat((absoluteChange / lastButOnePrice) * 100).toFixed(2);
+      setLastPriceStats({
+        lastPrice,
+        absoluteChange,
+        relativeChange,
+      });
+
       // const { data: quote } = await getAssetCurrentData(selected);
       // console.log("quote", quote);
       // setCurrentData({
@@ -106,6 +120,8 @@ export default function HomeMain() {
     }
   };
 
+  console.log(lastPriceStats);
+
   return (
     <Row className="row">
       <Col span={12} className="asset-graph-section">
@@ -117,20 +133,15 @@ export default function HomeMain() {
         />
         <div className="asset-title">
           <h2>{selected.name}</h2>
-          {/*           <h2>{currentData.close}</h2>
-          <h3>
-            {currentData.change}
-            <span style={{ fontSize: "1rem" }}>
-              {currentData.percent_change &&
-                ` (${currentData.percent_change}%)`}
-            </span>
-          </h3> */}
+          <h3>{lastPriceStats.lastPrice} USD</h3>
+          <h4>{lastPriceStats.absoluteChange + " "}{`(${lastPriceStats.relativeChange})`}</h4>
+          
+ 
         </div>
-
         <AssetChart data={data} />
       </Col>
 
-      <Col span={10} >
+      <Col span={10}>
         <News newsData={newsData} />
       </Col>
     </Row>

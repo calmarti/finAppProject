@@ -12,6 +12,7 @@ export default function AssetChart({ data }) {
   };
 
   return(
+    
     <Stock {...config} className="asset-graph" />
   )
 }
