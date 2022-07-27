@@ -1,22 +1,11 @@
 import { useEffect, useState } from "react";
-import {
-  // getAssetCurrentData,
-  getAssetSeries,
-  getNews,
-  getSelectOptions,
-} from "../../api/client";
+import { getSelectOptions, getAssetSeries, getNews } from "../../api/client";
+import { ArrowDownOutlined, ArrowUpOutlined } from "@ant-design/icons";
+import { Col, Row, Statistic, Tabs } from "antd";
 import SelectBox from "../SelectBox";
-// import CandleStockChart from "../CandleStickChart";
-// import LineChart from "../LineChart";
-import {
-  ArrowDownOutlined,
-  ArrowUpOutlined,
-  // LineChartOutlined,
-  // BarChartOutlined,
-} from "@ant-design/icons";
-import { Col, Row, Statistic } from "antd";
-import News from "./News";
 import Chart from "../Chart";
+import News from "./News";
+import { slice } from "lodash";
 
 //TODO: submenú de principales índices y endpoints (y api(s)!) correspondiente(s)
 //TODO: probar endpoint de alphavantage de exchange rates (meter symbols "a mano") y sino funciona buscar otra api
@@ -72,7 +61,7 @@ export default function HomeChart() {
     });
   }, []);
 
-  //Stock component stuff
+  const { TabPane } = Tabs;
 
   const yesterday = Math.floor(Date.now() / 1000) - Math.floor(1 * 24 * 3600); //must be seconds , not miliseconds
   const aYearAgo = Math.floor(Date.now() / 1000) - Math.floor(365 * 24 * 3600);
@@ -83,9 +72,8 @@ export default function HomeChart() {
   console.log("data", data);
   console.log("selected", selected);
   console.log("news", newsData);
-
+  //Stock component stuff
   const handleGetSeries = async (option) => {
-    console.log("OPTION", option);
     try {
       setSelected({ name: option.label, symbol: option.value });
       const { data: multiseries } = await getAssetSeries(
@@ -122,6 +110,8 @@ export default function HomeChart() {
         relativeChange,
       });
 
+      // const yearToDate = data.slice();
+
       // const { data: quote } = await getAssetCurrentData(selected);
       // console.log("quote", quote);
       // setCurrentData({
@@ -131,6 +121,39 @@ export default function HomeChart() {
       // });
     } catch (err) {
       console.log(err);
+    }
+  };
+
+  //datos para el selector de frecuencias
+  //TODO: Transita perfecto de 1Y a 6M ... 5D. 
+  //Problema: al regresar a un período anterior el slice es sobre el nuevo data 
+  //solución posible (pero cara): crear un state solo para los tabs
+  const last5Days = data?.slice(data.length - 5);
+  const lastWeek = data?.slice(data.length - 7);
+  const lastMonth = data?.slice(data.length - 22);
+  const last3Months = data?.slice(data.length - 66);
+  const last6Months = data?.slice(data.length - 132);
+  //TODO: const YTD = undefined;
+
+  const changePeriod = (key) => {
+
+    switch (key) {
+      case "1":
+        setData(last5Days);
+        break;
+      case "2":
+        setData(lastWeek);
+        break;
+      case "3":
+        setData(lastMonth);
+        break;
+      case "4":
+        setData(last3Months);
+        break;
+      case "5":
+        setData(last6Months);
+        break;
+      //TODO: case: back to 1 year
     }
   };
 
@@ -181,6 +204,21 @@ export default function HomeChart() {
           )}
         </div>
         <Chart type={chartType} data={data} setChartType={setChartType} />
+        
+
+
+        <Tabs
+          defaultActiveKey="6"
+          // onTabClick={changePeriod}
+          onChange={(key) => changePeriod(key)}
+        >
+          <TabPane tab="5D" key="1"></TabPane>
+          <TabPane tab="W" key="2"></TabPane>
+          <TabPane tab="M" key="3"></TabPane>
+          <TabPane tab="3M" key="4"></TabPane>
+          <TabPane tab="6M" key="5"></TabPane>
+          <TabPane tab="1Y" key="6"></TabPane>
+        </Tabs>
       </Col>
 
       <Col span={6}>

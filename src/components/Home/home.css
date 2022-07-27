@@ -6,7 +6,7 @@
 .asset-graph-section {
   display: flex;
   flex-flow: column nowrap;
-  gap: 50px;
+  gap: 30px;
   justify-content: center;
   align-items: center;
   /* margin-top: 30px;
@@ -16,7 +16,10 @@
 .async-select {
   align-self: flex-start;
   margin-left:135px;
-  width: 40%;
+  width: 34%;
+  position:relative;
+  bottom:60px;
+
 }
 
 .async-select:hover {
@@ -34,8 +37,8 @@
 .chart-icon{
   align-self: flex-end;
   position:relative;
-  right:155px;
-  bottom: 160px;
+  right:160px;
+  bottom: 135px;
 }
 
 .asset-stats {
