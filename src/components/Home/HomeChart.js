@@ -6,16 +6,17 @@ import {
   getSelectOptions,
 } from "../../api/client";
 import SelectBox from "../SelectBox";
-import AssetChart from "../AssetChart";
-import LineChart from "../LineChart";
+// import CandleStockChart from "../CandleStickChart";
+// import LineChart from "../LineChart";
 import {
   ArrowDownOutlined,
   ArrowUpOutlined,
-  LineChartOutlined,
-  BarChartOutlined,
+  // LineChartOutlined,
+  // BarChartOutlined,
 } from "@ant-design/icons";
 import { Col, Row, Statistic } from "antd";
 import News from "./News";
+import Chart from "../Chart";
 
 //TODO: submenú de principales índices y endpoints (y api(s)!) correspondiente(s)
 //TODO: probar endpoint de alphavantage de exchange rates (meter symbols "a mano") y sino funciona buscar otra api
@@ -137,7 +138,7 @@ export default function HomeChart() {
 
   return (
     <Row className="row">
-      <Col span={12} className="asset-graph-section">
+      <Col span={14} className="asset-graph-section">
         <SelectBox
           options={options}
           selected={selected}
@@ -179,21 +180,10 @@ export default function HomeChart() {
             />
           )}
         </div>
-
-        {chartType === "line" ? (
-          <>
-            <BarChartOutlined onClick={(ev) => setChartType("stock")} style={{fontSize:"1.5rem"}} />
-            <LineChart data={data} />
-          </>
-        ) : (
-          <>
-            <LineChartOutlined onClick={(ev) => setChartType("line")} style={{fontSize:"1.5rem"}}/>
-            <AssetChart data={data} />
-          </>
-        )}
+        <Chart type={chartType} data={data} setChartType={setChartType} />
       </Col>
 
-      <Col span={10}>
+      <Col span={6}>
         <News newsData={newsData} />
       </Col>
     </Row>
