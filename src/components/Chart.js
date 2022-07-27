@@ -12,7 +12,7 @@ export default function Chart({ type, data, setChartType }) {
             style={{ fontSize: "1.5rem" }}
             className="chart-icon"
           />
-          <LineChart data={data} className="asset-graph" />
+          <LineChart data={data} className="asset-graph"  />
         </>
       ) : (
         <>
