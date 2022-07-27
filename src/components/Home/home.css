@@ -15,7 +15,7 @@
 
 .async-select {
   align-self: flex-start;
-  margin-left:135px;
+  margin-left: 135px;
   width: 40%;
 }
 
@@ -30,6 +30,14 @@
 /* .asset-graph {
   width: 100%;
 } */
+
+.chart-icon {
+  align-self: flex-end;
+  position:relative;
+  right:80px;
+  bottom:160px;
+ 
+}
 
 .asset-stats {
   width: 75%;

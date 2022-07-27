@@ -10,14 +10,16 @@ export default function Chart({ type, data, setChartType }) {
           <BarChartOutlined
             onClick={(ev) => setChartType("stock")}
             style={{ fontSize: "1.5rem" }}
+            className="chart-icon"
           />
-          <LineChart data={data} className="asset-graph" />
+          <LineChart data={data} className="asset-graph"  />
         </>
       ) : (
         <>
           <LineChartOutlined
             onClick={(ev) => setChartType("line")}
             style={{ fontSize: "1.5rem" }}
+            className="chart-icon"
           />
           <CandleStickChart data={data} className="asset-graph" />
         </>
