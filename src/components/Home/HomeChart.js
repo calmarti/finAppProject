@@ -5,7 +5,8 @@ import { Col, Row, Statistic, Tabs } from "antd";
 import SelectBox from "../SelectBox";
 import Chart from "../Chart";
 import News from "./News";
-import { slice } from "lodash";
+
+//TODO: problema en 'changePeriod'
 
 //TODO: submenú de principales índices y endpoints (y api(s)!) correspondiente(s)
 //TODO: probar endpoint de alphavantage de exchange rates (meter symbols "a mano") y sino funciona buscar otra api
@@ -35,12 +36,6 @@ export default function HomeChart() {
   const [newsData, setNewsData] = useState([]);
   const [lastPriceStats, setLastPriceStats] = useState(null);
   const [chartType, setChartType] = useState("line");
-
-  // const [currentData, setCurrentData] = useState({
-  //   price: null,
-  //   change: null,
-  //   percent_change: null,
-  // });
 
   useEffect(() => {
     getSelectOptions()
@@ -72,7 +67,7 @@ export default function HomeChart() {
   console.log("data", data);
   console.log("selected", selected);
   console.log("news", newsData);
-  //Stock component stuff
+
   const handleGetSeries = async (option) => {
     try {
       setSelected({ name: option.label, symbol: option.value });
@@ -81,52 +76,63 @@ export default function HomeChart() {
         startDate,
         endDate
       );
-      const len = multiseries.t.length;
-      const data = [...Array(len)];
-      console.log("multiseries", multiseries);
-      for (let i in data) {
-        const date = new Date(multiseries.t[i] * 1000).toISOString();
-        data[i] = {
-          close: multiseries.c[i],
-          high: multiseries.h[i],
-          low: multiseries.l[i],
-          open: multiseries.o[i],
-          date: date,
-          volume: multiseries.v[i],
-        };
-      }
-      setData(data);
-      const lastPrice = data[data.length - 1].close;
-      const lastButOnePrice = data[data.length - 2].close;
-      const absoluteChange = Number.parseFloat(
-        lastPrice - lastButOnePrice
-      ).toFixed(2);
-      const relativeChange = Number.parseFloat(
-        (absoluteChange / lastButOnePrice) * 100
-      ).toFixed(2);
-      setLastPriceStats({
-        lastPrice,
-        absoluteChange,
-        relativeChange,
-      });
-
-      // const yearToDate = data.slice();
-
-      // const { data: quote } = await getAssetCurrentData(selected);
-      // console.log("quote", quote);
-      // setCurrentData({
-      //   price: quote.c,
-      //   change: quote.d,
-      //   percent_change: quote.dp,
-      // });
+      const series = fromMultiseriesToSeries(multiseries);
+      setData(series);
+      getAndSetLastPriceStats(series);
     } catch (err) {
       console.log(err);
     }
   };
 
+  const fromMultiseriesToSeries = (multiseries) => {
+    const len = multiseries.t.length;
+    const series = [...Array(len)];
+    console.log("multiseries", multiseries);
+    for (let i in series) {
+      const date = new Date(multiseries.t[i] * 1000).toISOString();
+      series[i] = {
+        close: multiseries.c[i],
+        high: multiseries.h[i],
+        low: multiseries.l[i],
+        open: multiseries.o[i],
+        date: date,
+        volume: multiseries.v[i],
+      };
+    }
+    return series;
+  };
+
+  const getAndSetLastPriceStats = (series) => {
+    const lastPrice = series[series.length - 1].close;
+    const lastButOnePrice = series[series.length - 2].close;
+
+    const absoluteChange = Number.parseFloat(
+      lastPrice - lastButOnePrice
+    ).toFixed(2);
+
+    const relativeChange = Number.parseFloat(
+      (absoluteChange / lastButOnePrice) * 100
+    ).toFixed(2);
+
+    setLastPriceStats({
+      lastPrice,
+      absoluteChange,
+      relativeChange,
+    });
+  };
+  // const yearToDate = data.slice();
+
+  // const { data: quote } = await getAssetCurrentData(selected);
+  // console.log("quote", quote);
+  // setCurrentData({
+  //   price: quote.c,
+  //   change: quote.d,
+  //   percent_change: quote.dp,
+  // });
+
   //datos para el selector de frecuencias
-  //TODO: Transita perfecto de 1Y a 6M ... 5D. 
-  //Problema: al regresar a un período anterior el slice es sobre el nuevo data 
+  //TODO: Transita perfecto de 1Y a 6M ... 5D.
+  //Problema: al regresar a un período anterior el slice es sobre el nuevo data
   //solución posible (pero cara): crear un state solo para los tabs
   const last5Days = data?.slice(data.length - 5);
   const lastWeek = data?.slice(data.length - 7);
@@ -136,7 +142,6 @@ export default function HomeChart() {
   //TODO: const YTD = undefined;
 
   const changePeriod = (key) => {
-
     switch (key) {
       case "1":
         setData(last5Days);
@@ -204,8 +209,6 @@ export default function HomeChart() {
           )}
         </div>
         <Chart type={chartType} data={data} setChartType={setChartType} />
-        
-
 
         <Tabs
           defaultActiveKey="6"
