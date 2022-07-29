@@ -5,7 +5,7 @@ export default function News({ newsData }) {
   // const { Meta } = Card;
 
   const topNews = newsData.slice(0, 5);
-  console.log("top", topNews);
+  // console.log("top", topNews);
 
   return (
     <>

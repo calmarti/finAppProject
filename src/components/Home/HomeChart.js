@@ -5,8 +5,13 @@ import { Col, Row, Statistic, Tabs } from "antd";
 import SelectBox from "../SelectBox";
 import Chart from "../Chart";
 import News from "./News";
+import utils from "../../utils";
 
-//TODO: problema en 'changePeriod'
+//TODO: problema: no hace el setData(series) al hacer el handleGetSeries por primera vez 
+//TODO: problema asociado al anterior: a veces al cambiar de una acción a otra no carga de inmediato los datos (mantiene el mismo gráfico)
+//TODO: problema asociado al anterior: a veces al cambiar de frecuencias el precio actual no corresponde con el último de la serie!
+//TODO: problema: hay que resetear el tab (ej. si está en 1M y se dispara otro handleGetSeries por defecto debe pasar a 1Y)
+
 
 //TODO: submenú de principales índices y endpoints (y api(s)!) correspondiente(s)
 //TODO: probar endpoint de alphavantage de exchange rates (meter symbols "a mano") y sino funciona buscar otra api
@@ -32,6 +37,8 @@ export default function HomeChart() {
   const [keyword, setKeyword] = useState("");
   const [selected, setSelected] = useState({});
   const [options, setOptions] = useState([]);
+
+  const [series, setSeries] = useState([]);
   const [data, setData] = useState([]);
   const [newsData, setNewsData] = useState([]);
   const [lastPriceStats, setLastPriceStats] = useState(null);
@@ -40,7 +47,7 @@ export default function HomeChart() {
   useEffect(() => {
     getSelectOptions()
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         const data = res.data.map((obj) => ({
           label: obj.description,
           value: obj.symbol,
@@ -50,6 +57,17 @@ export default function HomeChart() {
       .catch((err) => console.log(err));
   }, [keyword]);
 
+  // const periods = useMemo(
+  //   () => ({
+  //     last5Days: series?.slice(series.length - 5),
+  //     lastWeek: series?.slice(series.length - 7),
+  //     lastMonth: series?.slice(series.length - 22),
+  //     last3Months: series?.slice(series.length - 66),
+  //     last6Months: series?.slice(series.length - 132),
+  //   }),
+  //   [series]
+  // );
+
   useEffect(() => {
     getNews().then((result) => {
       setNewsData(result.data);
@@ -58,27 +76,23 @@ export default function HomeChart() {
 
   const { TabPane } = Tabs;
 
-  const yesterday = Math.floor(Date.now() / 1000) - Math.floor(1 * 24 * 3600); //must be seconds , not miliseconds
-  const aYearAgo = Math.floor(Date.now() / 1000) - Math.floor(365 * 24 * 3600);
-
-  const startDate = aYearAgo;
-  const endDate = yesterday;
-
+  console.log("series", series);
   console.log("data", data);
-  console.log("selected", selected);
-  console.log("news", newsData);
 
   const handleGetSeries = async (option) => {
     try {
       setSelected({ name: option.label, symbol: option.value });
+
       const { data: multiseries } = await getAssetSeries(
         option,
-        startDate,
-        endDate
+        utils.A_YEAR_AGO,
+        utils.YESTERDAY
       );
-      const series = fromMultiseriesToSeries(multiseries);
+      setSeries(fromMultiseriesToSeries(multiseries));
+      console.log("series from handleGetSeries", series)
       setData(series);
       getAndSetLastPriceStats(series);
+      
     } catch (err) {
       console.log(err);
     }
@@ -87,7 +101,7 @@ export default function HomeChart() {
   const fromMultiseriesToSeries = (multiseries) => {
     const len = multiseries.t.length;
     const series = [...Array(len)];
-    console.log("multiseries", multiseries);
+    // console.log("multiseries", multiseries);
     for (let i in series) {
       const date = new Date(multiseries.t[i] * 1000).toISOString();
       series[i] = {
@@ -120,6 +134,7 @@ export default function HomeChart() {
       relativeChange,
     });
   };
+
   // const yearToDate = data.slice();
 
   // const { data: quote } = await getAssetCurrentData(selected);
@@ -134,35 +149,45 @@ export default function HomeChart() {
   //TODO: Transita perfecto de 1Y a 6M ... 5D.
   //Problema: al regresar a un período anterior el slice es sobre el nuevo data
   //solución posible (pero cara): crear un state solo para los tabs
-  const last5Days = data?.slice(data.length - 5);
-  const lastWeek = data?.slice(data.length - 7);
-  const lastMonth = data?.slice(data.length - 22);
-  const last3Months = data?.slice(data.length - 66);
-  const last6Months = data?.slice(data.length - 132);
-  //TODO: const YTD = undefined;
+  //otra solución (¿mejor?): método filter sobre data
+  
+  const last5Days = series?.slice(series.length - 5);
+  const lastWeek = series?.slice(series.length - 7);
+  const lastMonth = series?.slice(series.length - 22);
+  const last3Months = series?.slice(series.length - 66);
+  const last6Months = series?.slice(series.length - 132);
 
   const changePeriod = (key) => {
     switch (key) {
       case "1":
+        // setData(series);
         setData(last5Days);
         break;
       case "2":
+        // setData(series);
         setData(lastWeek);
         break;
       case "3":
+        // setData(series);
         setData(lastMonth);
         break;
       case "4":
+        // setData(series);
         setData(last3Months);
         break;
       case "5":
+        // setData(series);
         setData(last6Months);
         break;
-      //TODO: case: back to 1 year
+      case "6":
+        setData(series);
+        break;
+      default:
+        setData(series);
     }
   };
 
-  console.log(lastPriceStats);
+  // console.log(lastPriceStats);
 
   return (
     <Row className="row">

@@ -20,7 +20,7 @@ export default function SelectBox({options, selected, setKeyword, handleGetSerie
     <AsyncSelect
       className="async-select"
       autoFocus={true}
-      cacheOptions={true} //TODO: probar esto
+      cacheOptions={true} 
       loadOptions={promiseOptions}
       value={selected.symbol}
       onChange={handleGetSeries}
