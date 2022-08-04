@@ -12,4 +12,4 @@ UI - Home
 - User can preview the 5 top news stories (headline and summary)
 - User can go to the source to read the whole story
 ### Next:
--
+- Animated bar with main stock indexes and forex rates
