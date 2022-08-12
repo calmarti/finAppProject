@@ -7,10 +7,10 @@ import Chart from "../Chart";
 import News from "./News";
 import utils from "../../utils";
 
-//TODO: problema: no hace el setData(series) al hacer el handleGetSeries por primera vez 
-//TODO: problema asociado al anterior: a veces al cambiar de una acción a otra no carga de inmediato los datos (mantiene el mismo gráfico)
-//TODO: problema asociado al anterior: a veces al cambiar de frecuencias el precio actual no corresponde con el último de la serie!
+
+
 //TODO: problema: hay que resetear el tab (ej. si está en 1M y se dispara otro handleGetSeries por defecto debe pasar a 1Y)
+//para esto buscar en el API la prop apropiada de Tabs 
 
 
 //TODO: submenú de principales índices y endpoints (y api(s)!) correspondiente(s)
@@ -90,9 +90,8 @@ export default function HomeChart() {
       );
       setSeries(fromMultiseriesToSeries(multiseries));
       console.log("series from handleGetSeries", series)
-      setData(series);
-      getAndSetLastPriceStats(series);
-      
+      setData(fromMultiseriesToSeries(multiseries));
+      getAndSetLastPriceStats(fromMultiseriesToSeries(multiseries));  
     } catch (err) {
       console.log(err);
     }
@@ -101,6 +100,7 @@ export default function HomeChart() {
   const fromMultiseriesToSeries = (multiseries) => {
     const len = multiseries.t.length;
     const series = [...Array(len)];
+    console.log('desde multi', series)
     // console.log("multiseries", multiseries);
     for (let i in series) {
       const date = new Date(multiseries.t[i] * 1000).toISOString();
